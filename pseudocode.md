@@ -4,7 +4,7 @@
 * Input field to enter in items for the list
 * Swap list to look at all completed items
 * Swap list to look at all items that still need to be done
-* Swap list to look at all items (completed or not)
+* Swap list to look at all completed itmes
 * Button to complete items
 * Button to clear completed items
 * Button to uncheck completed items
