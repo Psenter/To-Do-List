@@ -1,66 +1,84 @@
 import React from "react";
-import { useState } from 'react';
+import { useState } from "react";
+import handleCheck from "./ToDoCheck";
+import handleDelete from "./ToDoDelete";
 
-//exports the function to be displayed
-export default function ToDoList() {
-  //sets state
+//exports everthing to rendered
+export default function TodoList() {
+  //sets state for everything
+  //makes todos an array
   const [todos, setTodos] = useState([]);
-  const [inputValue, setInputValue] = useState('');
+  //stores the values of the input field
+  const [inputValue, setInputValue] = useState("");
 
-  //updates state to make the input match what is entered in
-  const handleInputChange = (e) => {
-    setInputValue(e.target.value);
-  };
+  //event listener that waits for change in the input field
+  function handleInput(event) {
+    //updates state of setInputValue with the input from the field
+    setInputValue(event.target.value);
+  }
 
-  //adds the ToDo item to the list
-  //resets the input field for the next submission
-  const handleSubmit = (e) => {
-    //stops the page from refreshing
-    e.preventDefault();
-    //removes and extra spaces in the input
-    if (inputValue.trim() !== '') {
-      //updates state and addes the next item entered into the list
-      setTodos([...todos, inputValue]);
-      //resets the input field
-      setInputValue('');
+  //function that is called when something is submitted the the input field
+  function handleSubmit(event) {
+    //stops page from refreshing on submission to the form
+    event.preventDefault();
+    //if there is an extra space at the start or end it removes it
+    if (inputValue.trim() !== "") {
+      //adds the object to the end of the todos array
+      //makes item default to not completed
+      setTodos([...todos, { title: inputValue, checked: false }]);
+      //sets the input field back to empty
+      setInputValue("");
     }
-  };
+  }
 
-  //how the remove button works
-  const handleRemove = (index) => {
-    //copies the 'todos' array
-    const updatedTodos = [...todos];
-    //removes the item at the index where the remove button is pressed
-    updatedTodos.splice(index, 1);
-    //changes the state of setTodos to match the new list
-    setTodos(updatedTodos);
-  };
-
-  //returns the list to be displayed
   return (
-    <div className="text-center">
-      <h1 className="mt-3">To-Do List</h1>
-      {/* When something is submitted it runs the handleSumbit function */}
-      <form className="mt-5" onSubmit={handleSubmit}>
-        {/* Sets the input type to text */}
-        {/* Updates inputValue's state with the user input */}
-        <input type="text" value={inputValue} onChange={handleInputChange} />
-        {/* Adds a button where users can also submit what they put into the field */}
+    <div>
+      <h1 className="text-center mt-5">To-do List</h1>
+      {/* when something is submitted to the page it calls the handlesubmit function */}
+      <form className="text-center" onSubmit={handleSubmit}>
+        {/* sets the type of input to text */}
+        {/* sets the value of the input to "inputValue" */}
+        {/* any change in the input field calls on the handleInput function */}
+        {/* placeholder just adds text while there is no user input */}
+        <input
+          className="text-center"
+          type="text"
+          value={inputValue}
+          onChange={handleInput}
+          placeholder="Add a To-do to the list"
+        />
+        {/* adds a button where if clicked, acts as if enter is hit */}
         <button type="submit">Add</button>
       </form>
-      <ul className="justify-content-center" style={{listStyleType:"none"}}>
-        {/* Maps over tods's array and generates the list */}
-        {/* key is set to index to add an identifier to each item */}
+      <ul className="text-center">
+        {/* maps through the todo array rendering it all on the screen */}
         {todos.map((todo, index) => (
+          /* key makes sure that each item has a unique ID so nothing get mixed up */
           <li key={index} className="mt-3">
-            {/* Renders the To-Do list */}
-            {todo}
-            {/* Adds a button where the user can remove the itme */}
-            {/* Calls the handleRemove function with the index it is clicked at to remove item */}
-            <button className="ms-3" onClick={() => handleRemove(index)}>Remove</button>
+            {/* adds a checkbox to each item */}
+            <input
+              className="me-3"
+              type="checkbox"
+              checked={todo.checked}
+              onChange={() => handleCheck(index, todos, setTodos)}
+            />
+            {/* checks to see if the checkbox is checked off or not */}
+            {/* if a checkbox is checked it marks the box and puts a line through it */}
+            <span
+              style={{ textDecoration: todo.checked ? "line-through" : "none" }}
+            >
+              {todo.title}
+            </span>
+            {/* Button to remove items */}
+            <button
+              className="ms-3"
+              onClick={() => handleDelete(index, todos, setTodos)}
+            >
+              Delete
+            </button>
           </li>
         ))}
       </ul>
     </div>
   );
-};
+}
