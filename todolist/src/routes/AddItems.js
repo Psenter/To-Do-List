@@ -6,8 +6,8 @@ function AddItems({ addItem }) {
 
   function toDoSubmit(event) {
     event.preventDefault();
-    console.log("inputValue:", inputValue); // Check if inputValue is correctly set
-    console.log("dueDate:", dueDate); // Check if dueDate is correctly set
+    console.log("inputValue:", inputValue);
+    console.log("dueDate:", dueDate);
     addItem(inputValue, dueDate);
     setInputValue('');
     setDueDate('');
